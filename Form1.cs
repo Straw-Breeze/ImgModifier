@@ -13,6 +13,8 @@ namespace ImgModifier
     public partial class Form1 : Form
     {
         public static bool flag = false;
+        public static int[,] formatHorizon = new int[2,2]{ { 1366, 768 }, { 448, 252 } };
+        public static int[,] formatVertical = new int[2, 2] { { 960, 1440 }, { 448, 672 } };
 
         public Form1()
         {
@@ -48,12 +50,35 @@ namespace ImgModifier
 
         private void button1_Click(object sender, EventArgs e)
         {
-            String path = "C:/Users/drago/Desktop/test.jpg";
-            Image newImg = new Bitmap(768, 1366);
-            Graphics graphics = Graphics.FromImage(newImg);
-            graphics.DrawImage(pictureBox1.Image, 0, 0, 768, 1366);
-            newImg.Save(path);
-            newImg.Dispose();
+            string[] tmpPath = getImgCatalog(textBox1.Text);
+            for (int i = 0; i < 2; i++)
+            {
+                int x = formatHorizon[i, 0];
+                int y = formatHorizon[i, 1];
+                if (!flag)
+                {
+                    x = formatVertical[i, 0];
+                    y = formatVertical[i, 1];
+                }
+                Image newImg = new Bitmap(x, y);
+                Graphics graphics = Graphics.FromImage(newImg);
+                graphics.DrawImage(pictureBox1.Image, 0, 0, x, y);
+                newImg.Save(tmpPath[0] + "_" + x.ToString() + "x" + y.ToString() + tmpPath[1]);
+                newImg.Dispose();
+            }
+        }
+
+        private string[] getImgCatalog(string imgPath)
+        {
+            int L = imgPath.Length;
+            for (int i = L - 1; i >= 0; i--)
+            {
+                if (imgPath[i] == '.')
+                {
+                    return new string[] { imgPath.Remove(i), imgPath.Substring(i) };
+                }
+            }
+            return new string[] { "error", "error" };
         }
     }
 }
