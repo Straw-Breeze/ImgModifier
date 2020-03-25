@@ -13,7 +13,7 @@ namespace ImgModifier
     public partial class Form1 : Form
     {
         public static bool flag = false;
-        public static int[,] formatHorizon = new int[2,2]{ { 1366, 768 }, { 448, 252 } };
+        public static int[,] formatHorizon = new int[3,2]{ { 1366, 768 }, { 448, 252 }, { 1080, 680 } };
         public static int[,] formatVertical = new int[2, 2] { { 960, 1440 }, { 448, 672 } };
 
         public Form1()
@@ -66,6 +66,18 @@ namespace ImgModifier
                 newImg.Save(tmpPath[0] + "_" + x.ToString() + "x" + y.ToString() + tmpPath[1]);
                 newImg.Dispose();
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string[] tmpPath = getImgCatalog(textBox1.Text);
+            int x = formatHorizon[2, 0];
+            int y = formatHorizon[2, 1];
+            Image newImg = new Bitmap(x, y);
+            Graphics graphics = Graphics.FromImage(newImg);
+            graphics.DrawImage(pictureBox1.Image, 0, 0, x, y);
+            newImg.Save(tmpPath[0] + "_" + x.ToString() + "x" + y.ToString() + tmpPath[1]);
+            newImg.Dispose();
         }
 
         private string[] getImgCatalog(string imgPath)
