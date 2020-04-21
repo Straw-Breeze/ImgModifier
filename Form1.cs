@@ -156,9 +156,18 @@ namespace ImgModifier
 
         private void pictureBox2_Paint(object sender, PaintEventArgs e)
         {
-            if (rectangle != null)
+            if (rectangle != null && pictureBox2.Image != null)
             {
-                e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Black), 1), this.rectangle);
+                Color backcolor = Color.FromArgb(155, Color.Black);
+                List<Rectangle> rects = new List<Rectangle>();
+                rects.Add(new Rectangle(0, 0, pictureBox2.Width, rectangle.Y));
+                rects.Add(new Rectangle(0, rectangle.Y, rectangle.X, rectangle.Height));
+                rects.Add(new Rectangle(rectangle.Right, rectangle.Top, pictureBox2.Width - rectangle.Right, rectangle.Height));
+                rects.Add(new Rectangle(0, rectangle.Bottom, pictureBox2.Width, pictureBox2.Height - rectangle.Bottom));
+                e.Graphics.FillRectangles(new SolidBrush(backcolor), rects.ToArray());
+                Pen pen = new Pen(new SolidBrush(Color.DeepSkyBlue), 3);
+                // pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                e.Graphics.DrawRectangle(pen, rectangle);
             }
         }
 
