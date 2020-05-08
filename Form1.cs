@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,6 +64,7 @@ namespace ImgModifier
                 return;
             }
             string[] tmpPath = getImgCatalog(textBox1.Text);
+            ImageFormat imageFormat = getImgFormat(tmpPath[1]);
             for (int i = 0; i < 2; i++)
             {
                 int x = formatHorizon[i, 0];
@@ -75,7 +77,7 @@ namespace ImgModifier
                 Image newImg = new Bitmap(x, y);
                 Graphics graphics = Graphics.FromImage(newImg);
                 graphics.DrawImage(pictureBox1.Image, 0, 0, x, y);
-                newImg.Save(tmpPath[0] + "_" + x.ToString() + "x" + y.ToString() + tmpPath[1]);
+                newImg.Save(tmpPath[0] + "_" + x.ToString() + "x" + y.ToString() + tmpPath[1], imageFormat);
                 newImg.Dispose();
             }
         }
@@ -88,12 +90,13 @@ namespace ImgModifier
                 return;
             }
             string[] tmpPath = getImgCatalog(textBox1.Text);
+            ImageFormat imageFormat = getImgFormat(tmpPath[1]);
             int x = formatHorizon[2, 0];
             int y = formatHorizon[2, 1];
             Image newImg = new Bitmap(x, y);
             Graphics graphics = Graphics.FromImage(newImg);
             graphics.DrawImage(pictureBox1.Image, 0, 0, x, y);
-            newImg.Save(tmpPath[0] + "_" + x.ToString() + "x" + y.ToString() + tmpPath[1]);
+            newImg.Save(tmpPath[0] + "_" + x.ToString() + "x" + y.ToString() + tmpPath[1], imageFormat);
             newImg.Dispose();
         }
 
@@ -108,6 +111,19 @@ namespace ImgModifier
                 }
             }
             return new string[] { "error", "error" };
+        }
+
+        private ImageFormat getImgFormat(string imgSuffix)
+        {
+            if (imgSuffix == ".jpeg" || imgSuffix == ".jpg")
+            {
+                return ImageFormat.Jpeg;
+            }
+            else if (imgSuffix == ".bmp")
+            {
+                return ImageFormat.Bmp;
+            }
+            return ImageFormat.Png;
         }
 
         private void pictureBox2_DragDrop(object sender, DragEventArgs e)
@@ -227,10 +243,11 @@ namespace ImgModifier
             int h = pictureBox2.Image.Height * rectangle.Height / pictureBox2.Height;
             int W = 540, H = 540;
             string[] tmpPath = getImgCatalog(textBox2.Text);
+            ImageFormat imageFormat = getImgFormat(tmpPath[1]);
             Image newImg = new Bitmap(W, H);
             Graphics graphics = Graphics.FromImage(newImg);
             graphics.DrawImage(pictureBox2.Image, new Rectangle(0, 0, W, H), new Rectangle(sx, sy, w, h), GraphicsUnit.Pixel);
-            newImg.Save(tmpPath[0] + "_" + W.ToString() + "x" + H.ToString() + tmpPath[1]);
+            newImg.Save(tmpPath[0] + "_" + W.ToString() + "x" + H.ToString() + tmpPath[1], imageFormat);
             newImg.Dispose();
         }
 
